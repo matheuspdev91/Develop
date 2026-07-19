@@ -1,4 +1,3 @@
-import json
 import requests
 
 from foundation.config import (
@@ -25,7 +24,8 @@ class OllamaClient:
         self,
         system: str,
         user: str,
-    ):
+    ) -> dict:
+
         payload = {
             "model": self.model,
             "messages": [
@@ -51,12 +51,14 @@ class OllamaClient:
         self,
         system: str,
         user: str,
-    ):
+    ) -> dict:
+
         payload = self._build_payload(system, user)
 
         response = requests.post(
             url=f"{self.host}/api/chat",
             json=payload,
+            timeout = 120,
         )
 
         response.raise_for_status()
