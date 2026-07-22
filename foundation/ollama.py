@@ -1,4 +1,6 @@
 import requests
+from foundation.prompt_context import PromptContext
+import json
 
 from foundation.config import (
     DEFAULT_MODEL,
@@ -22,8 +24,7 @@ class OllamaClient:
 
     def _build_payload(
         self,
-        system: str,
-        user: str,
+        context: PromptContext,
     ) -> dict:
 
         payload = {
@@ -31,29 +32,46 @@ class OllamaClient:
             "messages": [
                 {
                     "role": "system",
-                    "content": system,
+                    "content": context.system,
                 },
 
                 {
                     "role": "user",
-                    "content": user,
+                    "content": context.user,
                 },
             ],
 
             "stream": False,
+
+            "options": {
+                "num_predict": 200,
+            },
         }
 
         return payload
 
 
-    def chat(
+    def generate(
     
         self,
-        system: str,
-        user: str,
+        context: PromptContext,
     ) -> dict:
+      
+        payload = self._build_payload(context)
+        
+        print("=" * 80)
+        print(f"Modelo: {self.model}")
+        print(f"System: {len(context.system)} caracteres")
+        print(f"User: {len(context.user)} caracteres")
+        print("=" * 80)
 
-        payload = self._build_payload(system, user)
+
+        print("=" * 80)
+        print(f"Modelo: {self.model}")
+        print(f"Prompt do sistema: {len(context.system)} caracteres")
+        print(f"Prompt do usuário: {len(context.user)} caracteres")
+        print(f"num_predict: {payload['options']['num_predict']}")
+        print("=" * 80)
 
         response = requests.post(
             url=f"{self.host}/api/chat",
@@ -64,4 +82,4 @@ class OllamaClient:
         response.raise_for_status()
         return response.json()
 
-       
+    
