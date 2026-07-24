@@ -1,21 +1,22 @@
+import dataclasses
+from pprint import pprint
+from foundation.domain import chat_response
 import requests
 from foundation.prompt_context import PromptContext
-import json
-
-from foundation.config import (
-    DEFAULT_MODEL,
-    OLLAMA_HOST,
-)
+from foundation.domain.chat_response import ChatResponse
+from foundation.clients.llm_client import LLMClient
 
 
-class OllamaClient:
+
+
+class OllamaClient(LLMClient):
     """
     Cliente responsável por conversar com o Ollama.
     """
     def __init__(
         self,
-        model: str = DEFAULT_MODEL,
-        host: str = OLLAMA_HOST
+        model: str,
+        host: str,
     ):
         
         self.model = model
@@ -80,6 +81,27 @@ class OllamaClient:
         )
 
         response.raise_for_status()
-        return response.json()
+
+        data = response.json()
+
+        from pprint import pprint
+
+        pprint(data)
+
+
+        message = data["message"]
+
+        content = (
+            message.get("content")
+            or message.get("thinking")
+            or ""
+        )
+
+        return ChatResponse(
+            content=content,
+            model=data['model'],
+            provider='ollama',
+        )
+            
 
     

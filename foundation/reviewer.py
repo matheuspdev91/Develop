@@ -1,13 +1,14 @@
 from foundation.promptbuilder import PromptBuilder
 from foundation.document import Document
+from foundation.clients.llm_client import LLMClient
 
 
 class Reviewer:
 
     def __init__(
         self,
-        client,
         prompt_builder: PromptBuilder,
+        client: LLMClient,
     ):
         self.client = client
         self.prompt_builder = prompt_builder
@@ -24,7 +25,7 @@ class Reviewer:
             document=document,
         )
 
-        print("2 - chamando o Ollama")
+        print("2 - chamando LLM")
 
         response = self.client.generate(context)
 
