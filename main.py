@@ -1,3 +1,7 @@
+from foundation.retriever.retriever import Retriever
+from pathlib import Path
+from foundation.document import Document
+from foundation.formatter import Formatter
 from foundation.clients.openrouter_client import OpenRouterClient
 from foundation.scanner import Scanner
 from foundation.clients.ollama_client import OllamaClient
@@ -26,18 +30,29 @@ reviewer = Reviewer(
     prompt_builder=builder,
 )
 
-document = documents[0]
+document = [
+    Document(Path("models.py"), ""),
+    Document(Path("views.py"), ""),
+    Document(Path("style.css"), ""),
+    Document(Path("migrations.py"), ""),
+    Document(Path("PostgreSQL_migration.sql"), ""),
+]
 
-response = reviewer.review(document)
+retriever = Retriever()
 
+selected = retriever.retrieve(
+    document,
+    "Migration",
+)
 
-print("=" * 40)
-print(f"Provider : {response.provider}")
-print(f"Model    : {response.model}")
-print(f"Prompt   : {response.prompt_tokens}")
-print(f"Output   : {response.completion_tokens}")
-print(f"Total    : {response.total_tokens}")
-print(f"Finish   : {response.finish_reason}")
-print("=" * 40)
+for document in selected:
+    print(document.name)
 
-print(response.content)
+#response = reviewer.review(document)
+
+#Formatter.console(response)
+
+#print("=" * 40)
+#print()
+
+#print(response.content)

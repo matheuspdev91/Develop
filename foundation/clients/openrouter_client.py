@@ -1,4 +1,6 @@
 from foundation.domain import chat_response
+from foundation.exceptions.llms_erros import LLMError
+from foundation.domain import chat_response
 from foundation.domain.chat_response import ChatResponse
 import requests
 from foundation.clients.llm_client import LLMClient
@@ -45,11 +47,20 @@ class OpenRouterClient(LLMClient):
         json=payload,
        )
 
-        #print(response.status_code)
 
-        #print(response.text)
+        if not response.ok:
+            try:
+                error = response.json()
+                message = error["error"]["message"]
 
-        response.raise_for_status()
+            except Exception:
+                message = response.text
+
+            raise LLMError(
+                provider="openrouter",
+                status_code=response.status_code,
+                message=message,
+    )
 
         data = response.json()
 
