@@ -30,23 +30,15 @@ reviewer = Reviewer(
     prompt_builder=builder,
 )
 
-document = [
-    Document(Path("models.py"), ""),
-    Document(Path("views.py"), ""),
-    Document(Path("style.css"), ""),
-    Document(Path("migrations.py"), ""),
-    Document(Path("PostgreSQL_migration.sql"), ""),
-]
-
 retriever = Retriever()
 
 selected = retriever.retrieve(
-    document,
-    "Migration",
+    documents,
+    "Analise meu banco de dados",
 )
 
 for document in selected:
-    print(document.name)
+    print(document.path)
 
 #response = reviewer.review(document)
 

@@ -1,8 +1,8 @@
 from foundation.domain import chat_response
+import requests
 from foundation.exceptions.llms_erros import LLMError
 from foundation.domain import chat_response
 from foundation.domain.chat_response import ChatResponse
-import requests
 from foundation.clients.llm_client import LLMClient
 
 

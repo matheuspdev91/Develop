@@ -47,7 +47,10 @@ class Retriever:
                 if keyword in name:
                     score += self.MATCH_SCORE
 
+        print(f"[DEBUG] {document.name} -> {score}")
+
         return score
+       
 
     def _detect_domain(
         self,

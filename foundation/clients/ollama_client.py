@@ -1,7 +1,6 @@
-import dataclasses
-from pprint import pprint
-from foundation.domain import chat_response
 import requests
+import dataclasses
+from foundation.domain import chat_response
 from foundation.prompt_context import PromptContext
 from foundation.domain.chat_response import ChatResponse
 from foundation.clients.llm_client import LLMClient
