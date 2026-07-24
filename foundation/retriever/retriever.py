@@ -1,17 +1,12 @@
 from foundation.document import Document
+from foundation.retriever.keywords import(
+    DATABASE_QUERY,
+    DATABASE_FILES
+)
 
 class Retriever:
 
     MATCH_SCORE = 10
-
-    DATABASE_KEYWORDS = (
-    "model",
-    "models",
-    "migration",
-    "migrations",
-    "database",
-    "repository",
-)
 
     def retrieve(
         self,
@@ -19,39 +14,54 @@ class Retriever:
         query: str,
     ) -> list[Document]:
         
+        domain = self._detect_domain(query)
+
         ranked_documents = sorted(
             documents,
             key=lambda document: self._score_document(
                 document,
-                query,
+                domain,
             ),
             reverse=True,
         )
 
         return [
-            documents
-            for documents in ranked_documents
-            if self._score_document(documents, query) > 0
+            document
+            for document in ranked_documents
+            if self._score_document(document, domain) > 0
         ]
 
     def _score_document(
         self,
         document: Document,
-        query: str,
+        domain: str | None,
     ) -> int:
 
         score = 0
+        if domain == "database":
+            
+            name = document.name.lower()
 
-        name = document.name.lower()
-        query = query.lower()
+            for keyword in DATABASE_FILES:
 
-        for keyword in self.DATABASE_KEYWORDS:
-            if keyword in query and keyword in name:
-                
-                MATCH_SCORE = 10
-                score += self.MATCH_SCORE
+                if keyword in name:
+                    score += self.MATCH_SCORE
 
         return score
 
-       
+    def _detect_domain(
+        self,
+        query: str,
+    ) -> str | None:
+
+        query = query.lower()
+
+        if any(keyword in query for keyword in DATABASE_QUERY):
+            return "database"
+
+        return None
+
+
+     
+
 
