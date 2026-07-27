@@ -1,6 +1,5 @@
+from foundation.exceptions.llms_erros import LLMError
 import requests
-import dataclasses
-from foundation.domain import chat_response
 from foundation.prompt_context import PromptContext
 from foundation.domain.chat_response import ChatResponse
 from foundation.clients.llm_client import LLMClient
@@ -44,7 +43,7 @@ class OllamaClient(LLMClient):
             "stream": False,
 
             "options": {
-                "num_predict": 200,
+                "num_predict": 1024,
             },
         }
 
@@ -55,17 +54,11 @@ class OllamaClient(LLMClient):
     
         self,
         context: PromptContext,
-    ) -> dict:
+    ) -> ChatResponse:
       
         payload = self._build_payload(context)
         
-        print("=" * 80)
-        print(f"Modelo: {self.model}")
-        print(f"System: {len(context.system)} caracteres")
-        print(f"User: {len(context.user)} caracteres")
-        print("=" * 80)
-
-
+    
         print("=" * 80)
         print(f"Modelo: {self.model}")
         print(f"Prompt do sistema: {len(context.system)} caracteres")
@@ -76,10 +69,18 @@ class OllamaClient(LLMClient):
         response = requests.post(
             url=f"{self.host}/api/chat",
             json=payload,
-            timeout = 120,
+            timeout = None,
         )
 
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+
+        except requests.RequestException as exc:
+            raise LLMError(
+                provider="ollama",
+                status_code=response.status_code,
+                message=str(exc),
+            ) from exc
 
         data = response.json()
 
@@ -91,16 +92,23 @@ class OllamaClient(LLMClient):
         message = data["message"]
 
         content = (
-            message.get("content")
-            or message.get("thinking")
-            or ""
+            message.get("content", "")
         )
 
         return ChatResponse(
             content=content,
             model=data['model'],
             provider='ollama',
-        )
             
+            prompt_tokens=data.get("prompt_eval_count"),
+            completion_tokens=data.get("eval_count"),
+            total_tokens=(
+                data.get("prompt_eval_count", 0)
+                + data.get("eval_count", 0)
+            ),
+            finish_reason=data.get("done_reason"),
+
+            thinking=message.get("thinking"),
+        )
 
     

@@ -16,13 +16,15 @@ class Reviewer:
 
     def review(
         self,
-        document: Document,
+        documents: list[Document],
+        question: str,
     ):
         print("1 - montando contexto")
 
         context = self.prompt_builder.build(
             specialist="review",
-            document=document,
+            question=question,
+            documents=documents,
         )
 
         print("2 - chamando LLM")

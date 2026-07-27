@@ -5,6 +5,11 @@ PROMPTS_DIR = Path(__file__).parent
 
 class PromptLoader:
     def load(self, specialist: str) -> str:
-        prompt_path = PROMPTS_DIR / f"{specialist}.md"
-        return prompt_path.read_text(encoding="utf-8")
+        base = (PROMPTS_DIR / "base.md").read_text(encoding="utf-8")
+
+        specialist = (
+            PROMPTS_DIR / f"{specialist}.md"
+        ).read_text(encoding="utf-8")
+        return f"{base}\n\n{specialist}"
+       
         

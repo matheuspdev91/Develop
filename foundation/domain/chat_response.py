@@ -15,8 +15,10 @@ class ChatResponse:
     model: str
     provider: str
 
-    prompt_tokens: int
-    completion_tokens: int
-    total_tokens: int
+    prompt_tokens: int | None = None
+    completion_tokens: int | None = None
+    total_tokens: int | None = None
 
-    finish_reason: str
+    finish_reason: str | None = None
+
+    thinking: str | None = None

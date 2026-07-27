@@ -11,15 +11,67 @@ class PromptBuilder:
     def build(
         self,
         specialist: str,
-        document: Document,
+        documents: list[Document],
+        question: str,
     ) -> PromptContext:
 
         system_prompt = self.loader.load(specialist)
-        user_prompt = document.content
-
-        return PromptContext(
-          system=system_prompt,
-          user=user_prompt,
-        )
 
         
+
+        parts = []
+
+        # ==========================
+        # Projeto
+        # ==========================
+
+        parts.append(
+            f"""
+####################################
+PROJETO
+####################################
+
+Linguagem: Python
+Framework: Django
+
+Quantidade de documentos: {len(documents)}
+
+####################################
+PERGUNTA
+####################################
+
+{question}
+"""
+        )
+
+        # ==========================
+        # Documentos
+        # ==========================
+
+        for document in documents:
+
+            parts.append(
+                f"""
+####################################
+DOCUMENTO
+####################################
+
+Arquivo:
+{document.path}
+
+Conteúdo:
+
+{document.content}
+
+####################################
+FIM DO DOCUMENTO
+####################################
+"""
+            )
+
+        user_prompt = "\n".join(parts)
+
+        return PromptContext(
+            system=system_prompt,
+            user=user_prompt,
+        )
