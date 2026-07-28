@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 @dataclass
-class MediaDocument:
+class Document:
     name: str
     category: str
     group: str
@@ -16,3 +16,5 @@ class MediaDocument:
 
     public_id: str | None = None
     url: str | None = None
+    normalized_name: str | None = None
+    
