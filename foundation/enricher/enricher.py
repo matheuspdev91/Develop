@@ -4,11 +4,11 @@ from abc import abstractmethod
 from foundation.media.document import Document
 
 
-class Parser(ABC):
+class Enricher(ABC):
 
     @abstractmethod
-    def parse(self, document: Document) -> None:
+    def enrich(self, document: Document) -> None:
         """
-        Interpreta um Document e enriquece seus metadados.
+        Enriquece um document com informações externas
         """
-    
+       

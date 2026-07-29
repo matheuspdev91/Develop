@@ -1,22 +1,20 @@
 import cloudinary
 from cloudinary.api import resources
+from foundation.config import CloudinaryConfig
 
 class CloudinaryClient:
 
-    def __init__(
-        self,
-        cloud_name: str,
-        api_key: str,
-        api_secret: str,
-    ):
+    def __init__(self, config: CloudinaryConfig):
+        self.config = config
 
         cloudinary.config(
-            cloud_name=cloud_name,
-            api_key=api_key,
-            api_secret=api_secret,
-            secure=True,
+            cloud_name=config.cloud_name,
+            api_key=config.api_key,
+            api_secret=config.api_secret,
+            secure=config.secure,
         )
-
+   
+        
     def list_assets(self) -> list[dict]:
 
 
