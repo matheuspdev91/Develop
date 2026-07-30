@@ -29,6 +29,8 @@ class CloudinaryEnricher(Enricher):
         for asset in assets:
             public_id = asset['public_id']
 
+            print(public_id)
+
             normalized  = public_id.rsplit("/", 1)[-1]
 
             if normalized in index:
@@ -43,5 +45,9 @@ class CloudinaryEnricher(Enricher):
             
 
 
- 
-        a
+
+
+
+
+
+

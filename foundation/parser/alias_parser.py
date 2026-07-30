@@ -13,7 +13,7 @@ class AliasParser(Parser):
         if normalized_name:
             document.normalized_name = normalized_name
 
-        return document
-           
+       
+       
         
         

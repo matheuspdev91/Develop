@@ -9,6 +9,6 @@ class Parser(ABC):
     @abstractmethod
     def parse(self, document: Document) -> None:
         """
-        Interpreta um Document e enriquece seus metadados.
+        Interpreta um Document e preenche atributos derivados
+        a partir dos seus próprios dados.
         """
-    

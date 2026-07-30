@@ -1,3 +1,5 @@
+from foundation.parser.filenameparser import FilenameParser
+from foundation.media.localmidiascanner import LocalMediaScanner
 from foundation import document
 import unittest
 from pathlib import Path
@@ -31,3 +33,25 @@ class TestPipeline(unittest.TestCase):
     FolderParser(),
     alias_parser
 )
+
+
+scanner = LocalMediaScanner(Path("foundation/tests/media"))
+
+documents = scanner.scan()
+
+print(f"Total de documentos: {len(documents)}")
+
+pipeline = Pipeline(
+    FolderParser(),
+    FilenameParser(),
+)
+
+pipeline.run(documents)
+
+for document in documents:
+    print("=" * 40)
+    print(f"name            : {document.name}")
+    print(f"category        : {document.category}")
+    print(f"group           : {document.group}")
+    print(f"normalized_name : {document.normalized_name}")
+    print(document.relative_path)

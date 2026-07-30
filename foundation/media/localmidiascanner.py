@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from foundation.media.document import Document
-from foundation.media.scanner import MediaScanner
+from foundation.media.media_scanner import MediaScanner
 
 
 class LocalMediaScanner(MediaScanner):
@@ -11,9 +11,14 @@ class LocalMediaScanner(MediaScanner):
 
     def scan(self) -> list[Document]:
 
+        print(self.root)
+        print(self.root.exists())
+        print(list(self.root.iterdir()))
+
         documents = []
 
         for file in self.root.rglob("*"):
+            print(file, file.is_file())
 
             if not file.is_file():
                 continue

@@ -1,7 +1,7 @@
 from pathlib import Path, PurePosixPath
 
 from foundation.media.document import Document
-from foundation.media.scanner import MediaScanner
+from foundation.media.media_scanner import MediaScanner
 
 
 class CloudinaryMediaScanner(MediaScanner):

@@ -9,10 +9,10 @@ class FolderParser(Parser):
 
         parts = document.relative_path.parts
 
-        if len(parts) > 1:
+        if len(parts) >= 3:
 
             document.category = parts[0]
-            document.group = parts[0]
+            document.group = parts[1]
             
-        return document
+      
 
