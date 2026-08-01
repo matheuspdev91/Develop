@@ -22,7 +22,9 @@ class CloudinaryEnricher(Enricher):
 
         assets = self.client.list_assets()
 
-        print(f"Total de assets: {len(assets)}")
+        print(f"public_id : {public_id}")
+        print(f"normalized: {normalized}")
+        print("-" * 40) 
 
         index: dict[str, dict] = {}
 
