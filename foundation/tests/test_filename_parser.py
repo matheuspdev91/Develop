@@ -14,7 +14,6 @@ cases = [
 ]
 
 for filename in cases:
-
     document = Document(
         name=filename,
         category="",
@@ -22,10 +21,10 @@ for filename in cases:
         extension=Path(filename).suffix,
         relative_path=Path(filename),
         absolute_path=Path(filename),
-        sha256=""
+        sha256="",
     )
 
     parser.parse(document)
 
-    print(f"{filename}")
-    print(f"→ {document.normalized_name}\n")
+    print(filename)
+    print(f"-> {document.normalized_name}\n")

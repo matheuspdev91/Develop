@@ -1,11 +1,10 @@
 import json
 from pathlib import Path
-
 from foundation.matcher.matcher_result import MatchResult
 
 
+
 class JsonExporter:
-    """Exporta resultados de match para um arquivo JSON."""
 
     def __init__(self, output_path: Path | str = "cloudinary_sync.json"):
         self.output_path = Path(output_path)
@@ -20,7 +19,9 @@ class JsonExporter:
                 "document": {
                     "path": result.document.relative_path.as_posix(),
                     "normalized_name": result.document.normalized_name,
+                    "group": result.document.group,
                 },
+
                 "candidate": result.candidate if result.matched else None,
             }
             data.append(item)

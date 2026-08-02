@@ -1,5 +1,10 @@
+from pathlib import Path
+
 import cloudinary
+import cloudinary.uploader
 from cloudinary.api import resources
+
+
 from foundation.config import CloudinaryConfig
 
 
@@ -22,7 +27,7 @@ class CloudinaryClient:
 
        params = {
            "type": "upload",
-           "resourse_type": "image",
+           "resource_type": "image",
            "max_results": 500,
        }
 
@@ -42,6 +47,26 @@ class CloudinaryClient:
                 break
 
        return assets
+
+    def upload(
+        self,
+        local_path: Path,
+        public_id: str,
+    ):
+
+        if not local_path.exists():
+            raise FileNotFoundError(local_path)
+
+        return cloudinary.uploader.upload(
+                str(local_path),
+                public_id=public_id,
+                resource_type="image",
+            )
+
+
+
+
+        
 
     
     

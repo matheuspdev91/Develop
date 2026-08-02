@@ -1,57 +1,34 @@
-from foundation.parser.filenameparser import FilenameParser
-from foundation.media.localmidiascanner import LocalMediaScanner
-from foundation import document
 import unittest
-from pathlib import Path
-from foundation.media.document import Document
-from foundation.parser.folder_parser import FolderParser
-from foundation.parser.alias_parser import AliasParser
-from foundation.pipeline.pipeline import Pipeline
+from unittest.mock import Mock
+
+from foundation.pipeline.pipeline_runner import PipelineRunner
 
 
-class TestPipeline(unittest.TestCase):
+class TestPipelineRunner(unittest.TestCase):
+    def test_run_orchestrates_current_pipeline_components(self):
+        documents = [object(), object()]
+        parsed_documents = [object(), object()]
+        results = [object(), object()]
+        scanner = Mock()
+        scanner.scan.return_value = documents
+        parser_pipeline = Mock()
+        parser_pipeline.run.return_value = parsed_documents
+        enricher = Mock()
+        matcher = Mock()
+        matcher.match.side_effect = results
+        exporter = Mock()
 
-    def test_pipeline(self):
-        document = Document(
-            name="supino reto",
-            category="",
-            group="",
-            extension=".gif",
-            relative_path=Path("peitoral/supino reto.gif"),
-            absolute_path=Path("/tmp/peitoral/supino reto.gif"),
-            sha256="123"
-)
-    document.normalized_name = "supino reto"
+        runner = PipelineRunner(scanner, parser_pipeline, enricher, matcher, exporter)
 
-    aliases = {
-    "supino reto": "supino"
-}
-    alias_parser = AliasParser(aliases)
+        self.assertEqual(runner.run(), results)
+        scanner.scan.assert_called_once_with()
+        parser_pipeline.run.assert_called_once_with(documents)
+        self.assertEqual(enricher.enrich.call_args_list[0].args, (parsed_documents[0],))
+        self.assertEqual(enricher.enrich.call_args_list[1].args, (parsed_documents[1],))
+        self.assertEqual(matcher.match.call_args_list[0].args, (parsed_documents[0],))
+        self.assertEqual(matcher.match.call_args_list[1].args, (parsed_documents[1],))
+        exporter.export.assert_called_once_with(results)
 
 
-    pipeline = Pipeline(
-    FolderParser(),
-    alias_parser
-)
-
-
-scanner = LocalMediaScanner(Path("foundation/tests/media"))
-
-documents = scanner.scan()
-
-print(f"Total de documentos: {len(documents)}")
-
-pipeline = Pipeline(
-    FolderParser(),
-    FilenameParser(),
-)
-
-pipeline.run(documents)
-
-for document in documents:
-    print("=" * 40)
-    print(f"name            : {document.name}")
-    print(f"category        : {document.category}")
-    print(f"group           : {document.group}")
-    print(f"normalized_name : {document.normalized_name}")
-    print(document.relative_path)
+if __name__ == "__main__":
+    unittest.main()

@@ -22,16 +22,10 @@ class CloudinaryEnricher(Enricher):
 
         assets = self.client.list_assets()
 
-        print(f"public_id : {public_id}")
-        print(f"normalized: {normalized}")
-        print("-" * 40) 
-
         index: dict[str, dict] = {}
 
         for asset in assets:
             public_id = asset['public_id']
-
-            print(public_id)
 
             normalized  = public_id.rsplit("/", 1)[-1]
 

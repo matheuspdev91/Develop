@@ -52,6 +52,7 @@ class TestJsonExporter(unittest.TestCase):
                     "document": {
                         "path": "Peitoral/Supino Reto.gif",
                         "normalized_name": "supino-reto",
+                        "group": "Peitoral"
                     },
                     "candidate": "Supino Reto",
                 },
@@ -61,6 +62,7 @@ class TestJsonExporter(unittest.TestCase):
                     "document": {
                         "path": "Ombros/Desenvolvimento.gif",
                         "normalized_name": "desenvolvimento",
+                        "group": "Ombros"
                     },
                     "candidate": None,
                 },
