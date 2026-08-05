@@ -1,3 +1,18 @@
+# ===========================================================================
+# LEGADO — NÃO REPRESENTA A ARQUITETURA OFICIAL
+# ===========================================================================
+#
+# Este arquivo foi classificado como código legado conforme ADR003.
+#
+# O main.py NÃO é o ponto de entrada oficial da Foundation.
+# O orquestrador oficial é o PipelineRunner.
+#
+# Este arquivo será removido quando um novo entrypoint for criado.
+#
+# Referência: docs/ADR/ADR003.md
+# Data: 2026-08-05
+# ===========================================================================
+
 from foundation.media.cloudinaryscanner import CloudinaryMediaScanner
 from foundation.clients.cloudinary_client import CloudinaryClient
 from foundation.config import OPENAI_BASE_URL

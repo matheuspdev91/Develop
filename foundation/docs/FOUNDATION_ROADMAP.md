@@ -23,7 +23,7 @@
 
 Última atualização:
 
-2026-08-04
+2026-08-05
 
 ---
 
@@ -42,7 +42,7 @@ Principais conclusões:
 - Fluxos principais funcionam.
 - Não há bloqueadores arquiteturais dentro da Foundation.
 - Existem riscos para evolução futura.
-- O `main.py` aparenta ser um script legado/desatualizado.
+- O `main.py` foi classificado como código legado.
 
 ---
 
@@ -50,11 +50,11 @@ Principais conclusões:
 
 ## 🔴 Prioridade P0
 
-### [ ] Definir contrato do PipelineRunner
+### [x] Definir contrato do PipelineRunner
 
 Status:
 
-⬜ Não iniciado
+✅ Concluído
 
 Origem:
 
@@ -62,18 +62,17 @@ Auditoria Geral
 
 Descrição:
 
-O PipelineRunner espera um `Enricher` singular (`.enrich()`), enquanto a Foundation possui um `EnricherPipeline` (`.run()`).
+O PipelineRunner esperava um `Enricher` singular (`.enrich()`), enquanto a Foundation possuía um `EnricherPipeline` (`.run()`).
 
 Objetivo:
 
 Definir oficialmente qual contrato será utilizado pela composição da aplicação.
 
-Critério para concluir:
+Critérios para conclusão:
 
-- [X] Decisão arquitetural tomada.
-- [X] Implementação realizada.
-- [X] Testes passando.
-
+- [x] Decisão arquitetural tomada.
+- [x] Implementação realizada.
+- [x] Testes passando.
 
 Decisão:
 
@@ -81,7 +80,9 @@ Decisão:
 
 O PipelineRunner deve consumir pipelines através do contrato:
 
+```text
 run(documents)
+```
 
 Componentes unitários mantêm seus contratos próprios:
 
@@ -92,15 +93,16 @@ Componentes unitários mantêm seus contratos próprios:
 Justificativa:
 
 O PipelineRunner é um orquestrador de estágios, não de documentos.
+
 ---
 
 ## 🟠 Prioridade P1
 
-### [ ] Unificar normalização de nomes
+### [x] Unificar normalização de nomes
 
 Status:
 
-⬜ Não iniciado
+✅ Concluído
 
 Origem:
 
@@ -120,25 +122,58 @@ Definir uma única estratégia oficial.
 
 Critérios para conclusão:
 
-- [X] Decisão arquitetural tomada.
+- [x] Decisão arquitetural tomada.
 - [x] ADR002 criado.
 - [x] Implementação concluída.
 - [x] Testes pós-implementação passando.
 - [x] Componentes alinhados.
 
-------
+Decisão:
+
+✅ Aprovada
+
+O FilenameParser é a única autoridade autorizada a produzir
+`normalized_name`.
+
+CloudinaryEnricher, Matcher, JsonExporter e CloudinarySync
+devem consumir esse valor sem recalcular sua normalização.
+
+Justificativa:
+
+`normalized_name` é um dado derivado do nome do arquivo.
+
+Sua responsabilidade pertence ao estágio de parsing.
+
+Consumidores podem adaptar formatos externos quando necessário,
+mas não podem recalcular informações internas.
+
+---
 
 ## 🟡 Prioridade P2
 
-### [ ] Revisar `main.py`
+### [x] Revisar `main.py`
 
 Status:
 
-⬜ Não iniciado
+✅ Implementado
+
+Data:
+
+2026-08-05
 
 Observação:
 
-Provavelmente trata-se de código legado.
+Trata-se de código legado.
+
+Decisão:
+
+✅ Aprovada
+
+O `main.py` deixa de ser considerado o ponto de entrada oficial da Foundation.
+
+O arquivo é classificado como código legado.
+
+Sua remoção dependerá da criação de um novo entrypoint alinhado à arquitetura oficial.
 
 ---
 
@@ -168,27 +203,50 @@ Status:
 
 # DECISÕES ARQUITETURAIS
 
-## ADR-001
+## ADR001
 
-### Semântica de `matched`
+**Status**
 
-Status:
+✅ Implementado
 
-✅ Definida
+**Resumo**
 
-Decisão:
+O PipelineRunner consome composições através do contrato:
 
 ```text
-matched == True
-
-↓
-
-Existe um correspondente.
+run(documents)
 ```
 
-Motivo:
+Componentes unitários preservam seus contratos individuais.
 
-Padronizar Matcher, Exporter e CloudinarySync.
+---
+
+## ADR002
+
+**Status**
+
+✅ Implementado
+
+**Resumo**
+
+O FilenameParser é a única autoridade sobre
+`normalized_name`.
+
+Todos os demais componentes apenas consomem esse valor.
+
+---
+
+## ADR003
+
+**Status**
+
+✅ Implementado
+
+**Resumo**
+
+O `main.py` deixa de ser considerado o ponto de entrada oficial da Foundation e passa a ser classificado como código legado.
+
+Sua remoção dependerá da criação de um novo entrypoint oficial.
 
 ---
 
@@ -200,6 +258,15 @@ Padronizar Matcher, Exporter e CloudinarySync.
 - Auditoria geral concluída.
 - Backlog inicial criado.
 
+## 2026-08-05
+
+- ADR001 implementado.
+- ADR002 implementado.
+- ADR003 implementado.
+- PipelineRunner alinhado ao contrato de composição.
+- Normalização de nomes centralizada no FilenameParser.
+- `main.py` classificado como código legado.
+
 ---
 
 # MÉTRICAS
@@ -210,13 +277,13 @@ Auditoria
 
 Pipeline
 
-- [ ] Scanner
+- [X] Scanner
 - [x] Parser
 - [x] Enricher
-- [ ] Matcher
+- [x] Matcher
 - [ ] Exporter
-- [ ] PipelineRunner
-- [ ] CloudinarySync
+- [x] PipelineRunner
+- [x] CloudinarySync
 
 Integração
 

@@ -1,7 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 
-from foundation.document import Document
+from foundation.media.document import Document
 
 
 class MediaScanner(ABC):

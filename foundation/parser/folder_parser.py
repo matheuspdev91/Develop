@@ -5,7 +5,7 @@ from foundation.parser.base import Parser
 class FolderParser(Parser):
 
 
-    def parse(self, document: Document) -> Document:
+    def parse(self, document: Document) -> None:
 
         parts = document.relative_path.parts
 
