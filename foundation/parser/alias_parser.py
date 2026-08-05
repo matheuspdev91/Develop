@@ -1,5 +1,5 @@
 from foundation.media.document import Document
-from foundation.parser.parser import Parser
+from foundation.parser.base import Parser
 
 class AliasParser(Parser):
 

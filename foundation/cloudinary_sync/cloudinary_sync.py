@@ -48,7 +48,6 @@ class CloudinarySync:
     def _build_public_id(self, group: str, candidate: str) -> str:
 
         group = group.lower().replace(" ", "_")
-        candidate = candidate.lower().replace(" ", "_")
 
         return f"{group}/{candidate}"
                 

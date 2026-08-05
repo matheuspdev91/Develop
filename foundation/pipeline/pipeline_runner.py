@@ -8,7 +8,7 @@ class PipelineRunner:
         enricher,
         matcher,
         exporter,
-    ):    
+    ):
         self.scanner = scanner
         self.parser_pipeline = parser_pipeline
         self.enricher = enricher
@@ -25,7 +25,6 @@ class PipelineRunner:
 
             self.enricher.enrich(document)
 
-
         results = []
 
         for document in documents:
@@ -36,5 +35,3 @@ class PipelineRunner:
         self.exporter.export(results)
 
         return results
-            
-         
